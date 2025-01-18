@@ -59,4 +59,28 @@ class MyClassTest extends TestCase
         $checkDigit = ULNGenerator::calculateCheckDigit( substr($uln1, 0, 9) );
         $this->assertEquals(2, $checkDigit);
     }
+
+    public function testNINOValidator(): void
+    {
+        $nino = "QQ 12 34 56 A";
+        $this->assertFalse(NINOValidator::validate($nino));
+
+        $nino = "JX048934B";
+        $this->assertTrue(NINOValidator::validate($nino));
+
+        $nino = "JO048934B";
+        $this->assertFalse(NINOValidator::validate($nino));
+
+        $nino = "JB048934Z";
+        $this->assertFalse(NINOValidator::validate($nino));
+
+        $nino = "BG745786B";
+        $this->assertFalse(NINOValidator::validate($nino));
+    }
+
+    public function testNINOGenerator(): void
+    {
+        $nino = NINOValidator::generate();
+        $this->assertTrue(NINOValidator::validate($nino));
+    }
 }
